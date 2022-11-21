@@ -4,22 +4,27 @@ from .span import Span
 from .cell import Cell
 from .coordinate import Coordinate
 
+class Spans(dict):
+    def add(self, span: Span):
+        self[span.coordinate] = span
+
+    def __getitem__(self, coordinate: Coordinate) -> Span:
+        if coordinate in self:
+            return super().__getitem__(coordinate)
+        return Span(coordinate)
+
 class Table:
     def __init__(self, data: List[List[str]], spans=List[Span]):
         self.data = data
-        self.spans = {span.coordinate: span for span in spans}
-        breakpoint()
+
+        self.spans = Spans()
+        for span in spans:
+            self.spans.add(span)
+
+        self.cells = []
+        for row, texts in enumerate(self.data):
+            for column, text in enumerate(texts):
+                self.cells.append(Cell(text=text, span=self.spans[Coordinate(row, column)]))
 
     def render(self):
-        cells = []
-        for row_index, row in enumerate(self.data):
-            for column_index, text in enumerate(row):
-                coordinate = Coordinate(row_index, column_index)
-                cells.append(
-                    Cell(
-                        text=text,
-                        coordinate=coordinate,
-                        span=self.spans.get(coordinate, Span(coordinate))
-                    )
-                )
         breakpoint()

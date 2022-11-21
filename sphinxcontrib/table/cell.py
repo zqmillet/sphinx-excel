@@ -1,7 +1,6 @@
 from unicodedata import east_asian_width
 from unicodedata import normalize
 
-from .coordinate import Coordinate
 from .span import Span
 
 width_map = {
@@ -20,9 +19,8 @@ def _get_string_display_width(string):
     return sum(_get_char_display_width(char) for char in string)
 
 class Cell:
-    def __init__(self, text: str, coordinate: Coordinate, span: Span):
+    def __init__(self, text: str, span: Span):
         self.text = text
-        self.coordinate = coordinate
         self.span = span
 
     def render(self, width, height, top_char: str = '-', bottom_char: str = '-'):
@@ -36,4 +34,8 @@ class Cell:
         return string + '+' + bottom_char * (width - 2) + '+'
 
     def __repr__(self):
-        return f'<cell {self.span} {self.text}>'
+        return f'<cell {self.span} {repr(self.text)}>'
+
+    @property
+    def coordinate(self):
+        return self.span.coordinate
