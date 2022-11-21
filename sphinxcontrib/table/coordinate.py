@@ -1,4 +1,5 @@
-class Coordinate:
-    def __init__(self, row, column):
-        self.row = row
-        self.column = column
+from collections import namedtuple
+
+class Coordinate(namedtuple('Coordinate', ['row', 'column'])):
+    def __repr__(self):
+        return f'({self.row}, {self.column})'

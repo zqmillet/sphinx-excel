@@ -34,3 +34,6 @@ class Cell:
             string += '|' + ' ' * (width - 2) + '|\n'
 
         return string + '+' + bottom_char * (width - 2) + '+'
+
+    def __repr__(self):
+        return f'<cell {self.span} {self.text}>'
