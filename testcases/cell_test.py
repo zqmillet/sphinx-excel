@@ -41,21 +41,31 @@ from sphinxcontrib.table.span import Span
             '|                  |\n' \
             '|                  |\n' \
             '+------------------+'
+        ),
+        (
+            '',
+            10,
+            3,
+            '+--------+\n' \
+            '|        |\n' \
+            '+--------+'
         )
     ]
 )
 def test_cell_render(text, width, height, rendered_text):
-    cell = Cell(text, Coordinate(0, 0), Span(Coordinate(0, 0), rows=1, columns=1))
+    cell = Cell(text, Span(Coordinate(0, 0), rows=1, columns=1))
     assert cell.render(width=width, height=height) == rendered_text
 
 @mark.parametrize(
-    'text, width, height, top_char, bottom_char, rendered_text', [
+    'text, width, height, north, south, west, east, rendered_text', [
         (
             'haha',
             10,
             3,
             '=',
             '-',
+            '|',
+            '|',
             '+========+\n' \
             '| haha   |\n' \
             '+--------+'
@@ -66,12 +76,25 @@ def test_cell_render(text, width, height, rendered_text):
             3,
             '-',
             '=',
+            '|',
+            '|',
             '+--------+\n' \
+            '| 苟利   |\n' \
+            '+========+'
+        ),
+        (
+            '苟利',
+            10,
+            3,
+            '',
+            '=',
+            '|',
+            '|',
             '| 苟利   |\n' \
             '+========+'
         )
     ]
 )
-def test_cell_render_with_border_char(text, width, height, top_char, bottom_char, rendered_text):
-    cell = Cell(text, Coordinate(0, 0), Span(Coordinate(0, 0), rows=1, columns=1))
-    assert cell.render(width=width, height=height, top_char=top_char, bottom_char=bottom_char) == rendered_text
+def test_cell_render_with_border_char(text, width, height, north, south, west, east, rendered_text):
+    cell = Cell(text, Span(Coordinate(0, 0), rows=1, columns=1))
+    assert cell.render(width=width, height=height, north=north, south=south, west=west, east=east) == rendered_text

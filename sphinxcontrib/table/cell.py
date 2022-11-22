@@ -1,3 +1,4 @@
+from typing import Optional
 from unicodedata import east_asian_width
 from unicodedata import normalize
 
@@ -23,15 +24,28 @@ class Cell:
         self.text = text
         self.span = span
 
-    def render(self, width, height, top_char: str = '-', bottom_char: str = '-'):
-        string = '+' + top_char * (width - 2) + '+\n'
-        for index, line in enumerate(self.text.splitlines()):
-            string += '| ' + line + ' ' * (width - _get_string_display_width(line) - 4) + ' |\n'
+    def render(self, width, height, south: str = '-', north: str = '-', west: str = '|', east: str = '|'):
+        south_east = '+' if south and east else ''
+        south_west = '+' if south and west else ''
+        north_east = '+' if north and east else ''
+        north_west = '+' if north and west else ''
 
-        for _ in range(index, height - 3):
-            string += '|' + ' ' * (width - 2) + '|\n'
+        if north:
+            string = north_west + north * (width - 2) + north_east + '\n'
+        else:
+            string = ''
 
-        return string + '+' + bottom_char * (width - 2) + '+'
+        index = 0
+        for line in self.text.splitlines():
+            string += west + ' ' + line + ' ' * (width - _get_string_display_width(line) - 4) + ' ' + east + '\n'
+            index += 1
+
+        for _ in range(index, height - 2):
+            string += west + ' ' * (width - 2) + east + '\n'
+
+        if south:
+            return string + south_west + south * (width - 2) + south_east
+        return string
 
     def __repr__(self):
         return f'<cell {self.span} {repr(self.text)}>'
@@ -39,3 +53,11 @@ class Cell:
     @property
     def coordinate(self):
         return self.span.coordinate
+
+    @property
+    def width(self):
+        return 4 + max((_get_string_display_width(line) for line in self.text.splitlines()), default=0)
+
+    @property
+    def height(self):
+        return 2 + len(self.text.splitlines())
