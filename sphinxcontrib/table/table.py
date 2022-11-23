@@ -13,9 +13,15 @@ class Spans(dict):
             return super().__getitem__(coordinate)
         return Span(coordinate)
 
+    def find(self, coordinate):
+        for span in self.values():
+            if coordinate in span:
+                return span
+        return None
+
 class Table:
-    def __init__(self, data: List[List[str]], spans=List[Span]):
-        self.data = data
+    def __init__(self, data: List[List[str]], spans=List[Span], headers: int = 1):
+        self.headers = headers
 
         self.spans = Spans()
         for span in spans:
@@ -24,11 +30,12 @@ class Table:
         self.cells = []
         self.columns = 0
         self.rows = 0
-        for row, texts in enumerate(self.data):
+        for row, texts in enumerate(data):
             for column, text in enumerate(texts):
                 self.cells.append(Cell(text=text, span=self.spans[Coordinate(row, column)]))
                 self.columns = max(self.columns, column + 1)
             self.rows = max(self.rows, row + 1)
+        breakpoint()
 
     def render(self):
         column_widths = [0] * self.columns
@@ -56,6 +63,7 @@ class Table:
 
     def get_cell_border(self, cell):
         border = {}
+        # 靠前, 靠上优先显示.
         if cell.coordinate.column == 0:
             border['west'] = '|'
             border['east'] = '|'
@@ -70,4 +78,11 @@ class Table:
             border['north'] = ''
             border['south'] = '-'
 
+        # 例外情况
+        if cell.coordinate.row == self.headers - 1:
+            border['south'] = '='
+
+        span = self.spans.find(cell.coordinate)
+        if span:
+            print(cell.coordinate, span)
         return border
