@@ -120,12 +120,13 @@ def test_cell_render(text, width, height, rendered_text):
         (
             '苟利',
             10,
-            3,
+            4,
             '',
             '=',
             '',
             '',
             ' 苟利   \n' \
+            '        \n' \
             '========'
         )
     ]

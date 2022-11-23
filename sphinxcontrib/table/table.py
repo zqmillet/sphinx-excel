@@ -55,5 +55,19 @@ class Table:
         return string
 
     def get_cell_border(self, cell):
-        pass
+        border = {}
+        if cell.coordinate.column == 0:
+            border['west'] = '|'
+            border['east'] = '|'
+        else:
+            border['west'] = ''
+            border['east'] = '|'
 
+        if cell.coordinate.row == 0:
+            border['north'] = '-'
+            border['south'] = '-'
+        else:
+            border['north'] = ''
+            border['south'] = '-'
+
+        return border
