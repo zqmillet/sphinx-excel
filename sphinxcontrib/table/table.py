@@ -13,7 +13,7 @@ class Spans(dict):
             return super().__getitem__(coordinate)
         return Span(coordinate)
 
-    def find(self, coordinate):
+    def find(self, coordinate) -> Span:
         for span in self.values():
             if coordinate in span:
                 return span
@@ -35,7 +35,6 @@ class Table:
                 self.cells.append(Cell(text=text, span=self.spans[Coordinate(row, column)]))
                 self.columns = max(self.columns, column + 1)
             self.rows = max(self.rows, row + 1)
-        breakpoint()
 
     def render(self):
         column_widths = [0] * self.columns
@@ -63,26 +62,37 @@ class Table:
 
     def get_cell_border(self, cell):
         border = {}
-        # 靠前, 靠上优先显示.
+
         if cell.coordinate.column == 0:
+            # 第一列左右都显示 |
             border['west'] = '|'
             border['east'] = '|'
         else:
+            # 其他列只显示右边的 |
             border['west'] = ''
             border['east'] = '|'
 
         if cell.coordinate.row == 0:
+            # 第一行上下都显示 -
             border['north'] = '-'
             border['south'] = '-'
         else:
+            # 其他行只显示下面的 -
             border['north'] = ''
             border['south'] = '-'
 
-        # 例外情况
         if cell.coordinate.row == self.headers - 1:
+            # 如果该行是表头的最后一行, 下边框显示 =
             border['south'] = '='
 
-        span = self.spans.find(cell.coordinate)
+        span = self.spans.find(cell.span.coordinate)
+            # 如果单元格在 span 的非最后一列, 不显示右边的 |
         if span:
-            print(cell.coordinate, span)
+            if cell.span.coordinate.column < span.coordinate.column + span.columns - 1:
+                border['east'] = ' '
+
+        if span:
+            if cell.span.coordinate.row < span.coordinate.row + span.rows - 1:
+                border['south'] = ' '
+
         return border

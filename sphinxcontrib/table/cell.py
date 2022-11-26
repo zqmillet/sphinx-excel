@@ -30,6 +30,15 @@ class Cell:
         north_east = '+' if north and east else ''
         north_west = '+' if north and west else ''
 
+        if south == ' ' and east == ' ':
+            south_east = ' '
+        elif south == ' ' and west == ' ':
+            south_west = ' '
+        elif north == ' ' and east == ' ':
+            north_east = ' '
+        elif north == ' ' and west == ' ':
+            north_west = ' '
+
         if north:
             string = north_west + north * (width - 2) + north_east + '\n'
         else:
@@ -61,3 +70,11 @@ class Cell:
     @property
     def height(self):
         return 2 + len(self.text.splitlines())
+
+    def is_last_column_in_span(self):
+        if self.span.coordinate:
+            return True
+        breakpoint()
+
+    def is_last_row_in_span(self):
+        pass

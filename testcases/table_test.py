@@ -15,7 +15,8 @@ def test_table():
             Span(Coordinate(2, 1), rows=1, columns=3),
             Span(Coordinate(3, 1), rows=2, columns=1),
             Span(Coordinate(3, 2), rows=2, columns=2)
-        ]
+        ],
+        headers=2
     )
     print()
     print(table.render())
