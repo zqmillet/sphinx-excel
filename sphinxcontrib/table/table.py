@@ -58,7 +58,7 @@ class Table:
                 string += ''.join(line)
                 string += '\n'
 
-        return string
+        return string.strip()
 
     def get_cell_border(self, cell):
         border = {}
@@ -86,13 +86,10 @@ class Table:
             border['south'] = '='
 
         span = self.spans.find(cell.span.coordinate)
-            # 如果单元格在 span 的非最后一列, 不显示右边的 |
-        if span:
-            if cell.span.coordinate.column < span.coordinate.column + span.columns - 1:
-                border['east'] = ' '
+        if span and cell.span.coordinate.column < span.coordinate.column + span.columns - 1:
+            border['east'] = ' '
 
-        if span:
-            if cell.span.coordinate.row < span.coordinate.row + span.rows - 1:
-                border['south'] = ' '
+        if span and cell.span.coordinate.row < span.coordinate.row + span.rows - 1:
+            border['south'] = ' '
 
         return border
