@@ -1,5 +1,5 @@
 """
-this module provides the directive bash.
+this module provides the directive excel.
 """
 
 from docutils.parsers.rst import directives
@@ -7,129 +7,85 @@ from docutils.nodes import raw
 from docutils.nodes import General
 from docutils.nodes import Element
 from docutils.nodes import caption
-from sphinx.util.docutils import SphinxDirective
+from docutils.parsers.rst.directives.tables import RSTTable
+from docutils.statemachine import StringList
 from sphinx.application import Sphinx
-from mezmorize import Cache
-from ansi2html import Ansi2HTMLConverter
+from openpyxl import load_workbook
 
-from .validators import parse_interactions
-from .validators import parse_overflow
-from .validators import parse_theme
-from .execute import execute
-from .execute import setup_and_teardown
-from .execute import wrap_header
-from .execute import wrap_content
-from .utilities import caption_wrapper
+from .table import Table
+from .span import Span
+from .coordinate import Coordinate
 
-class BashNode(General, Element):
+class ExcelNode(General, Element):
     """
-    bash directive.
+    excel directive.
     """
 
-class BashContentNode(General, Element):
+class ExcelContentNode(General, Element):
     """
-    content of bash.
-    """
-
-class BashCaptionNode(caption):
-    """
-    caption of bash directive.
+    content of excel.
     """
 
-class BashDirective(SphinxDirective):
+class ExcelCaptionNode(caption):
     """
-    an environment for bash
+    caption of excel directive.
     """
 
-    has_content = True
-    required_arguments = 0
-    optional_arguments = 0
-    final_argument_whitespace = True
+class ExcelDirective(RSTTable):
+    """
+    an environment for excel
+    """
 
     option_spec = {
-        'do-not-run': directives.flag,
-        'display-command': directives.unchanged,
-        'timeout': directives.nonnegative_int,
-        'interactions': parse_interactions,
-        'overflow': parse_overflow,
-        'setup': directives.unchanged,
-        'teardown': directives.unchanged,
-        'window-width': directives.positive_int,
-        'window-height': directives.positive_int,
-        'font-size': directives.unchanged,
-        'theme': parse_theme,
-        'caption': directives.unchanged_required,
+        **RSTTable.option_spec,
+        'caption': directives.unchanged,
     }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        if self.state.document.settings.env.config.sphinx_console_cache_dir:
-            self.execute = Cache(
-                CACHE_TYPE='filesystem',
-                CACHE_DIR=self.state.document.settings.env.config.sphinx_console_cache_dir
-            ).memoize()(execute)
-        else:
-            self.execute = execute
+    breakpoint()
 
     def run(self):
         """Render this environment"""
-        command, *custom_output = self.content
-        custom_output = '\n'.join(custom_output)
-        overflow_style = 'overflow-x:auto;' if self.options.get('overflow', 'scroll') == 'scroll' else 'white-space:pre-wrap;'
-        do_not_run = 'do-not-run' in self.options
-        display_command = self.options.get('display-command', command)
-        timeout = self.options.get('timeout', 30)
-        interactions = self.options.get('interactions', None)
-        window_width = self.options.get('window-width', 80)
-        window_height = self.options.get('window-height', 120)
-        font_size = self.options.get('font-size')
-        theme = self.options.get('theme', 'dark')
+        caption = self.options.get('caption')
+        location, *_ = self.arguments
+        file_path, worksheet_name = location.split(':')
 
-        self.arguments[:] = ['html']
-        convertor = Ansi2HTMLConverter(dark_bg=(theme == 'dark'), line_wrap=False, inline=True)
-
-        with setup_and_teardown(self.options.get('setup'), self.options.get('teardown')):
-            output = custom_output or (
-                '\n' + self.execute(
-                    command=command,
-                    timeout=timeout,
-                    interactions=interactions,
-                    window_width=window_width,
-                    window_height=window_height
+        workbook = load_workbook(file_path)
+        worksheet = workbook[worksheet_name]
+        data = [[str(cell.value) if cell.value is not None else '' for cell in row] for row in worksheet.rows]
+        spans = []
+        for cell_range in worksheet.merged_cell_ranges:
+            spans.append(
+                Span(
+                    Coordinate(row=cell_range.min_row - 1, column=cell_range.min_col - 1),
+                    rows=cell_range.max_row - cell_range.min_row + 1,
+                    columns=cell_range.max_col - cell_range.min_col + 1,
                 )
-            ) if not do_not_run else ''
+            )
+        table = Table(data=data, spans=spans)
+        print(table.render())
+        self.arguments = [caption] if caption else []
+        self.content = StringList(table.render().splitlines())
+        return super().run()
 
-        header = wrap_header(display_command, '', theme)
-        html = convertor.convert(header + output)
-        node = caption_wrapper(self, BashNode(), BashCaptionNode, self.options.get("caption"))
-
-        content = BashContentNode()
-        content.children.append(raw('', wrap_content(html, overflow_style, theme, font_size), format='html'))
-        node.children.append(content)
-        self.add_name(node)
-        return [node]
-
-def visit_bash_node(self, node):
+def visit_excel_node(self, node):
     """
-    enter :class:`BashNode` in html builder.
+    enter :class:`ExcelNode` in html builder.
     """
-    self.body.append(self.starttag(node, "div", CLASS="bash"))
+    self.body.append(self.starttag(node, "div", CLASS="excel"))
 
-def depart_bash_node(self, _node):
+def depart_excel_node(self, _node):
     """
-    leave :class:`BashNode` in html builder.
+    leave :class:`ExcelNode` in html builder.
     """
     self.body.append("</div>")
 
 def visit_caption_node(self, node):
     """
-    enter :class:`BashCaptionNode` in html builder
+    enter :class:`ExcelCaptionNode` in html builder
     """
     if not node.astext():
         return
 
-    self.body.append(self.starttag(node, "div", CLASS="bash-caption"))
+    self.body.append(self.starttag(node, "div", CLASS="excel-caption"))
     self.add_fignumber(node.parent)
 
     self.body.append(" ")
@@ -137,7 +93,7 @@ def visit_caption_node(self, node):
 
 def depart_caption_node(self, node):
     """
-    leave :class:`BashCaptionNode` in html builder
+    leave :class:`ExcelCaptionNode` in html builder
     """
     if not node.astext():
         return
@@ -147,13 +103,13 @@ def depart_caption_node(self, node):
 
 def visit_content_node(self, node):
     """
-    enter :class:`BashContentNode` in html builder.
+    enter :class:`ExcelContentNode` in html builder.
     """
     self.body.append(self.starttag(node, "div", CLASS='highlight-rst notranslate highlight'))
 
 def depart_content_node(self, _node):
     """
-    leave :class:`BashContentNode` in HTML builder.
+    leave :class:`ExcelContentNode` in HTML builder.
     """
     self.body.append("</div>")
 
@@ -161,30 +117,30 @@ def initialize_numfig_format(_application, config):
     """
     initialize :confval:`numfig_format`.
     """
-    config.numfig_format['bash'] = 'Bash %s'
+    config.numfig_format['excel'] = 'Table %s'
 
 def setup(application: Sphinx):
     """
-    setup bash directive.
+    setup excel directive.
     """
 
-    application.add_directive('bash', BashDirective)
+    application.add_directive('excel', ExcelDirective)
     application.connect(event="config-inited", callback=initialize_numfig_format)
 
     application.add_enumerable_node(
-        node=BashNode,
-        figtype='bash',
-        html=(visit_bash_node, depart_bash_node),
-        singlehtml=(visit_bash_node, depart_bash_node),
+        node=ExcelNode,
+        figtype='excel',
+        html=(visit_excel_node, depart_excel_node),
+        singlehtml=(visit_excel_node, depart_excel_node),
     )
     application.add_node(
-        node=BashCaptionNode,
+        node=ExcelCaptionNode,
         override=True,
         html=(visit_caption_node, depart_caption_node),
         singlehtml=(visit_caption_node, depart_caption_node),
     )
     application.add_node(
-        node=BashContentNode,
+        node=ExcelContentNode,
         html=(visit_content_node, depart_content_node),
         singlehtml=(visit_content_node, depart_content_node),
     )
