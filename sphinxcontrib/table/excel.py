@@ -12,7 +12,7 @@ from .span import Span
 from .coordinate import Coordinate
 
 def get_data(worksheet):
-    return [[str(cell.value) if cell.value is not None else '' for cell in row] for row in worksheet.rows]
+    return [[str(cell.value) if cell.value else '' for cell in row] for row in worksheet.rows]
 
 def get_spans(worksheet):
     return [
