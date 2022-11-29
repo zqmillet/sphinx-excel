@@ -4,19 +4,19 @@ this is the setup of this package.
 
 from setuptools import setup
 
-from sphinxcontrib.table import __version__
+from sphinxcontrib.excel import __version__
 
 with open('sphinxcontrib/requirements.txt', 'r', encoding='utf8') as file:
     install_requires = list(map(lambda x: x.strip(), file.readlines()))
 
 setup(
-    name='sphinx-table',
+    name='sphinx-excel',
     version='.'.join(map(str, __version__)),
     author='kinopico',
     author_email='zqmillet@qq.com',
-    url='https://github.com/zqmillet/sphinx-table',
+    url='https://github.com/zqmillet/sphinx-excel',
     description='an extension for sphinx to display excel table in sphinx documents',
-    packages=['sphinxcontrib.table'],
+    packages=['sphinxcontrib.excel'],
     install_requires=install_requires,
     include_package_data=True,
     namespace_packages=["sphinxcontrib"],

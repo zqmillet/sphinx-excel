@@ -33,7 +33,7 @@ class ExcelDirective(RSTTable, SphinxDirective):
         **RSTTable.option_spec,
         'caption': directives.unchanged,
         'sheet': directives.unchanged,
-        'headers': directives.positive_int,
+        'headers': directives.nonnegative_int,
         'no-caption': directives.flag,
     }
 
