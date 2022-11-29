@@ -1,7 +1,7 @@
 """
 this is the package sphinxcontrib.console.
 """
-__version__ = (1, 0, 9)
+__version__ = (1, 1, 0)
 
 from .excel import ExcelDirective
 
