@@ -49,7 +49,16 @@ from sphinxcontrib.table.span import Span
             '+--------+\n' \
             '|        |\n' \
             '+--------+'
+        ),
+        (
+            '哈，哈',
+            10,
+            3,
+            '+--------+\n' \
+            '| 哈，哈 |\n' \
+            '+--------+'
         )
+
     ]
 )
 def test_cell_render(text, width, height, rendered_text):

@@ -5,7 +5,7 @@ from unicodedata import normalize
 from .span import Span
 
 width_map = {
-    'F': 1,     # full width
+    'F': 2,     # full width
     'H': 1,     # half width
     'W': 2,     # wide
     'Na': 1,    # narrow
