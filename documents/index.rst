@@ -1,6 +1,7 @@
 sphinx-table
 ============
 
-.. excel:: ./demo.xlsx:Sheet1
+.. excel:: ./demo.xlsx
    :class: rows
    :align: center
+   :sheet: Sheet1
