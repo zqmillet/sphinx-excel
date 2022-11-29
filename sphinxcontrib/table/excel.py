@@ -34,6 +34,7 @@ class ExcelDirective(RSTTable, SphinxDirective):
         'caption': directives.unchanged,
         'sheet': directives.unchanged,
         'headers': directives.positive_int,
+        'no-caption': directives.flag,
     }
 
     def run(self):
@@ -45,14 +46,14 @@ class ExcelDirective(RSTTable, SphinxDirective):
         _, file_path = self.env.relfn2path(file_path)
         workbook = load_workbook(file_path)
         default_worksheet_name, *_ = workbook.sheetnames
-
-        caption = self.options.get('caption')
         headers = self.options.get('headers', 1)
         worksheet_name = self.options.get('sheet', default_worksheet_name)
+        caption = self.options.get('caption', worksheet_name)
+        no_caption = 'no-caption' in self.options
 
         worksheet = workbook[worksheet_name]
         table = Table(data=get_data(worksheet), spans=get_spans(worksheet), headers=headers)
-        self.arguments = [caption] if caption else []
+        self.arguments = [] if no_caption else [caption]
         self.content = StringList(table.render().splitlines())
 
         return super().run()

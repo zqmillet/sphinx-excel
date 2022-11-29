@@ -5,6 +5,7 @@ sphinx-table
    :class: rows
    :align: center
    :sheet: Sheet1
+   :no-caption:
 
 .. excel:: ./demo.xlsx
    :class: rows
