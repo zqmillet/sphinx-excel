@@ -2,6 +2,10 @@
 
 [![sphinx-excel](https://img.shields.io/badge/pypi-sphinx--excel-brightgreen)](https://pypi.org/project/sphinx-excel/)
 [![Documentation Status](https://readthedocs.org/projects/sphinx-excel/badge/?version=latest)](https://sphinx-excel.readthedocs.io/en/latest/?badge=latest)
+![pytest](https://github.com/zqmillet/sphinx-excel/actions/workflows/pytest.yml/badge.svg)
+![mypy](https://github.com/zqmillet/sphinx-excel/actions/workflows/mypy.yml/badge.svg)
+![flake8](https://github.com/zqmillet/sphinx-excel/actions/workflows/flake8.yml/badge.svg)
+![pytest](https://github.com/zqmillet/sphinx-excel/actions/workflows/pytest.yml/badge.svg)
 
 ## introduction
 
