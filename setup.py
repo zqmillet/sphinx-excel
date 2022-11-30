@@ -9,6 +9,9 @@ from sphinxcontrib.excel import __version__
 with open('sphinxcontrib/requirements.txt', 'r', encoding='utf8') as file:
     install_requires = list(map(lambda x: x.strip(), file.readlines()))
 
+with open('readme.md', 'r', encoding='utf8') as file:
+    long_description = file.read()
+
 setup(
     name='sphinx-excel',
     version='.'.join(map(str, __version__)),
@@ -18,6 +21,7 @@ setup(
     description='an extension for sphinx to display excel table in sphinx documents',
     packages=['sphinxcontrib.excel'],
     install_requires=install_requires,
+    long_description=long_description,
     include_package_data=True,
     namespace_packages=["sphinxcontrib"],
 )
