@@ -1,8 +1,8 @@
 from pytest import mark
 
-from sphinxcontrib.table.cell import Cell
-from sphinxcontrib.table.coordinate import Coordinate
-from sphinxcontrib.table.span import Span
+from sphinxcontrib.excel.cell import Cell
+from sphinxcontrib.excel.coordinate import Coordinate
+from sphinxcontrib.excel.span import Span
 
 @mark.parametrize(
     'text, width, height, rendered_text', [
