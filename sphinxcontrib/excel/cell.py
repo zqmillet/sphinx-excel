@@ -1,8 +1,7 @@
-from typing import Optional
 from unicodedata import east_asian_width
-from unicodedata import normalize
 
 from .span import Span
+from .coordinate import Coordinate
 
 width_map = {
     'F': 2,     # full width
@@ -13,10 +12,10 @@ width_map = {
     'N': 1,     # neutral
 }
 
-def _get_char_display_width(char):
+def _get_char_display_width(char: str) -> int:
     return width_map.get(east_asian_width(char), 1)
 
-def _get_string_display_width(string):
+def _get_string_display_width(string: str) -> int:
     return sum(_get_char_display_width(char) for char in string)
 
 class Cell:
@@ -24,7 +23,7 @@ class Cell:
         self.text = text
         self.span = span
 
-    def render(self, width, height, south: str = '-', north: str = '-', west: str = '|', east: str = '|'):
+    def render(self, width: int, height: int, south: str = '-', north: str = '-', west: str = '|', east: str = '|'):
         south_east = '+' if south and east else ''
         south_west = '+' if south and west else ''
         north_east = '+' if north and east else ''
@@ -56,11 +55,11 @@ class Cell:
             return string + south_west + south * (width - 2) + south_east
         return string
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<cell {self.span} {repr(self.text)}>'
 
     @property
-    def coordinate(self):
+    def coordinate(self) -> Coordinate:
         return self.span.coordinate
 
     @property
@@ -70,11 +69,3 @@ class Cell:
     @property
     def height(self):
         return 2 + len(self.text.splitlines())
-
-    def is_last_column_in_span(self):
-        if self.span.coordinate:
-            return True
-        breakpoint()
-
-    def is_last_row_in_span(self):
-        pass
