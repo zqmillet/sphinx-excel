@@ -3,9 +3,13 @@ this is the package sphinxcontrib.console.
 """
 __version__ = (1, 0, 0)
 
+from typing import Dict
+from typing import Any
+from sphinx.application import Sphinx
+
 from .excel import ExcelDirective
 
-def setup(application):
+def setup(application: Sphinx) -> Dict[str, Any]:
     """
     setup extension.
     """

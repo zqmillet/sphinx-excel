@@ -23,7 +23,7 @@ class Cell:
         self.text = text
         self.span = span
 
-    def render(self, width: int, height: int, south: str = '-', north: str = '-', west: str = '|', east: str = '|'):
+    def render(self, width: int, height: int, south: str = '-', north: str = '-', west: str = '|', east: str = '|') -> str:
         south_east = '+' if south and east else ''
         south_west = '+' if south and west else ''
         north_east = '+' if north and east else ''
@@ -63,9 +63,9 @@ class Cell:
         return self.span.coordinate
 
     @property
-    def width(self):
+    def width(self) -> int:
         return 4 + max((_get_string_display_width(line) for line in self.text.splitlines()), default=0)
 
     @property
-    def height(self):
+    def height(self) -> int:
         return 2 + len(self.text.splitlines())

@@ -1,11 +1,13 @@
 from typing import List
+from typing import Dict
+from typing import Optional
 
 from .span import Span
 from .cell import Cell
 from .coordinate import Coordinate
 
 class Spans(dict):
-    def add(self, span: Span):
+    def add(self, span: Span) -> None:
         self[span.coordinate] = span
 
     def __getitem__(self, coordinate: Coordinate) -> Span:
@@ -13,14 +15,14 @@ class Spans(dict):
             return super().__getitem__(coordinate)
         return Span(coordinate)
 
-    def find(self, coordinate) -> Span:
+    def find(self, coordinate: Coordinate) -> Optional[Span]:
         for span in self.values():
             if coordinate in span:
                 return span
         return None
 
 class Table:
-    def __init__(self, data: List[List[str]], spans=List[Span], headers: int = 1):
+    def __init__(self, data: List[List[str]], spans: List[Span], headers: int = 1):
         self.headers = headers
 
         self.spans = Spans()
@@ -36,7 +38,7 @@ class Table:
                 self.columns = max(self.columns, column + 1)
             self.rows = max(self.rows, row + 1)
 
-    def render(self):
+    def render(self) -> str:
         column_widths = [0] * self.columns
         row_heights = [0] * self.rows
         for cell in self.cells:
@@ -60,7 +62,7 @@ class Table:
 
         return string.strip()
 
-    def get_cell_border(self, cell):
+    def get_cell_border(self, cell: Cell) -> Dict[str, str]:
         border = {}
 
         if cell.coordinate.column == 0:
