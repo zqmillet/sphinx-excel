@@ -1,8 +1,5 @@
-sphinx-excel
-============
-
-简介
-----
+sphinx-excel 简介
+=================
 
 Sphinx 插入表格有几种方式, 这几种方式都不令人满意.
 
@@ -12,8 +9,8 @@ Sphinx 插入表格有几种方式, 这几种方式都不令人满意.
 
 因此我开发了 sphinx-excel, 可以非常方便的将 excel 文件渲染在 Sphinx 页面中, 并且支持单元格合并以及环境嵌套.
 
-安装
-----
+sphinx-excel 安装
+=================
 
 可以使用 :numref:`install` 中命令安装 sphinx-excel.
 
@@ -22,8 +19,12 @@ Sphinx 插入表格有几种方式, 这几种方式都不令人满意.
    :do-not-run:
    :caption: 安装 sphinx-excel
 
-使用
-----
+sphinx-excel 使用
+=================
+
+.. hint::
+
+    :download:`点此下载 <tables.xlsx>` 本文当中使用的 excel 文件.
 
 首先在 ``conf.py`` 文件中添加如下配置.
 
@@ -44,7 +45,7 @@ Sphinx 插入表格有几种方式, 这几种方式都不令人满意.
 .. _render_table_result:
 .. excel:: ./tables.xlsx
 
-``excel`` 默认会渲染指定 excel 中的第一个 sheet, 并缺会把第一个 sheet 的名称显示在表格的标题, 如果你不想显示标题, 可以使用 ``:no-caption`` 参数, 如 :numref:`render_table_without_caption_code` 所示.
+``excel`` 默认会渲染指定 excel 中的第一个 sheet, 并会把第一个 sheet 的名称显示在表格的标题, 如果你不想显示标题, 可以使用 ``:no-caption`` 参数, 如 :numref:`render_table_without_caption_code` 所示.
 
 .. _render_table_without_caption_code:
 .. code-block:: rest
@@ -94,7 +95,7 @@ Sphinx 插入表格有几种方式, 这几种方式都不令人满意.
    :align: center
    :sheet: 员工信息
 
-值得注意的是, ``excel`` 默认会将第一行加粗, 表示改行是表头, 如果表头行数不为 1, 需要使用 ``:headers:`` 参数指定, 如 :numref:`render_table_with_headers_code` 所示.
+值得注意的是, ``excel`` 默认会将第一行加粗, 表示该行是表头, 如果表头行数不为 1, 需要使用 ``:headers:`` 参数指定, 如 :numref:`render_table_with_headers_code` 所示.
 
 .. _render_table_with_headers_code:
 .. code-block:: rest
@@ -129,8 +130,3 @@ Sphinx 插入表格有几种方式, 这几种方式都不令人满意.
    :headers: 0
 
 从 :numref:`render_table_merged_cell_result` 中可以看出表格里可以有任何命令, 可以有代码块, 可以有 ``:admonition:``, 可以有列表, 也可以有公式. 甚至, 代码块是可以被引用的, 如 :numref:`code_demo` 所示.
-
-.. rubric:: footnotes
-
-- :download:`点此下载 <tables.xlsx>` 本文当中使用的 excel 文件.
-
