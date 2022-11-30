@@ -18,7 +18,6 @@ jobs:
         pip install pylint
         pip install pylint-pydantic
         pip install -r sphinxcontrib/requirements.txt
-        pip install -r testcases/requirements.txt
     - name: run pylint
       run: |
         export PYTHONPATH='.'
