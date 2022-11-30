@@ -1,5 +1,8 @@
 # sphinx-excel
 
+[![sphinx-excel](https://img.shields.io/badge/pypi-sphinx--excel-brightgreen)](https://pypi.org/project/sphinx-excel/)
+[![Documentation Status](https://readthedocs.org/projects/sphinx-excel/badge/?version=latest)](https://sphinx-excel.readthedocs.io/en/latest/?badge=latest)
+
 ## introduction
 
 sphinx-excel uses `openpyxl` to read an excel file and render it into sphinx document.
@@ -17,9 +20,9 @@ python3 -m pip install sphinx-excel
 please add `sphinxcontrib.excel` into you `conf.py` file.
 
 ``` python
-    extensions = [
-        'sphinxcontrib.excel',
-    ]
+extensions = [
+    'sphinxcontrib.excel',
+]
 ```
 
 ## usage
@@ -70,6 +73,6 @@ the first line of table is in bold font, it means that the first line is header 
 
 `excel` directive supports to render merged cell in excel. the content of the cell can be:
 
-- math equtions.
-- code snippets.
+- math equtions,
+- code snippets, and
 - other directives.
