@@ -24,7 +24,7 @@ def get_spans(worksheet: Worksheet) -> List[Span]:
             Coordinate(row=cell_range.min_row - 1, column=cell_range.min_col - 1),
             rows=cell_range.max_row - cell_range.min_row + 1,
             columns=cell_range.max_col - cell_range.min_col + 1,
-        ) for cell_range in worksheet.merged_cell_ranges # type: ignore
+        ) for cell_range in worksheet.merged_cell_ranges  # type: ignore
     ]
 
 class ExcelDirective(RSTTable, SphinxDirective):
@@ -45,7 +45,7 @@ class ExcelDirective(RSTTable, SphinxDirective):
         render this environment
         """
 
-        file_path, *_ = self.arguments # type: ignore
+        file_path, *_ = self.arguments  # type: ignore
         _, file_path = self.env.relfn2path(file_path)
         workbook = load_workbook(file_path)
         default_worksheet_name, *_ = workbook.sheetnames
