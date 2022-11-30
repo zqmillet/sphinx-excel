@@ -21,7 +21,7 @@ python3 -m pip install sphinx-excel
 
 ## setup
 
-please add `sphinxcontrib.excel` into you `conf.py` file.
+please add `sphinxcontrib.excel` into your `conf.py` file.
 
 ``` python
 extensions = [
@@ -51,7 +51,7 @@ if you want to specify the caption, you can use `:caption:` argument.
    :caption: hello world
 ```
 
-`excel` directive support all arguments of sphinx native `table` directive. for example, you can use `:align:` to change table align style.
+`excel` directive supports all arguments of sphinx native `table` directive. for example, you can use `:align:` to change table align style.
 
 ``` rst
 .. excel:: ./tables.xlsx
@@ -63,10 +63,10 @@ if an excel file contains more than one sheets, you can use `:sheet:` arguments 
 ``` rst
 .. excel:: ./tables.xlsx
    :align: center
-   :sheet: 员工信息
+   :sheet: stuff
 ```
 
-the first line of table is in bold font, it means that the first line is header of table. if the table has two rows header, you can use `:header:` to tell `excel` directive.
+the first line of table is in bold font, it means that the first line is header of table. if the table has two rows header, you can use `:headers:` to tell `excel` directive.
 
 ``` rst
 .. excel:: ./tables.xlsx
